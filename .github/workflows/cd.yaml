@@ -60,7 +60,7 @@ jobs:
           kustomize edit set image goapp=fernandojpessoa/argocd-fullcycle:${{ github.sha }}
           cat kustomization.yaml
   
-
+      #
       - name: commit
         run: |
           git config --local user.email "action@github.com"
