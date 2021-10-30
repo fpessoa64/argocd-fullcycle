@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goapp
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:  # troca de versão
+      maxSurge: 2  # 2 com os novos pods de 2 em 2 pode ser percentagem "25%"
+      maxUnavailable: 2 # detona 2 pods e atualiza
+
+  replicas: 1    #2
+  selector:
+    matchLabels:
+      app: goapp
+  template:
+    metadata:
+#      annotations:
+#        prometheus.io/scrape: "true"
+#        prometheus.io/path: /metrics
+#        prometheus.io/port: "8080"
+
+      labels:
+        app: goapp
+    spec:
+      
+        containers:
+        - name: goapp
+          image: goapp  #fernandojpessoa/argocd-fullcycle:latest # 0.1.6
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "128m"
+            limits:
+              memory: "512Mi"
+              cpu: "256m"
+          ports:
+            - containerPort: 8080
+
+         
+
+
+        imagePullSecrets:
+          - name: regcred
+        

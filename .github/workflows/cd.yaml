@@ -1,0 +1,73 @@
+
+name: CD
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+
+    env:
+      SHA8: ${GITHUB_SHA::8}
+      user: fernandojpessoa
+      app:  segflow4-backend
+      repos: fernandojpessoa/argocd-fullcycle
+
+    steps:
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: checkout
+        uses: actions/checkout@v2
+
+        
+
+      - name: Login to Dockerhub
+        uses: docker/login-action@v1
+        with:
+          username: fernandojpessoa
+          password: ${{secrets.DOCKER_PASSWORD}}
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          repository: fernandojpessoa/backend
+          tags: fernandojpessoa/argocd-fullcycle:${{ github.sha }}, fernandojpessoa/argocd-fullcycle:latest 
+          #tags: ${{env.repos}}:${{ github.sha }}, fernandojpessoa/argocd-fullcycle:latest 
+
+
+  # deploy:
+  #   name: Deploy
+  #   runs-on: ubuntu-latest
+  #   needs: build
+    
+  #   steps:
+  #     - name: checkout
+  #       uses: actions/checkout@v2
+
+  #     - name: kustomize
+  #       uses: imranismail/setup-kustomize@v1
+  #       with:
+  #         kustomize_version:  v3.6.1
+
+  #     - name: update k8s
+  #       run: |
+  #         cd k8s
+  #         kustomize edit set image backend=fernandojpessoa/argocd-fullcycle:${{ github.sha }}
+  #         cat kustomization.yaml
+  
+
+  #     - name: commit
+  #       run: |
+  #         git  config --local user.email "action@github.com"
+  #         git config --local user.name " Deploy action" 
+  #         git commit -am "change image tag `${{ github.sha }} `"
+
+  #     - name: push
+  #       uses: ad-m/github-push-action@master
+
