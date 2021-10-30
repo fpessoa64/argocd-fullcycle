@@ -29,7 +29,7 @@ jobs:
         uses: docker/login-action@v1
         with:
           username: fernandojpessoa
-          password: ${{secrets.DOCKER_PASSWORD}}
+          password: ${{secrets.DOCKER_ARGOCD}}
 
       - name: Build and push
         id: docker_build
@@ -38,8 +38,7 @@ jobs:
           push: true
           repository: fernandojpessoa/backend
           tags: fernandojpessoa/argocd-fullcycle:${{ github.sha }}, fernandojpessoa/argocd-fullcycle:latest 
-          #tags: ${{env.repos}}:${{ github.sha }}, fernandojpessoa/argocd-fullcycle:latest 
-
+ 
 
   # deploy:
   #   name: Deploy
