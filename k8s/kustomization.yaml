@@ -10,4 +10,4 @@ namespace: homolog
 images:
 - name: goapp
   newName: fernandojpessoa/argocd-fullcycle
-  newTag: 0f0479710c20b93b63be04d245c3bf6b9fb17af6
+  newTag: 9d85958f393fcbd0d0f9de184ffe8c7a468ceb1d
